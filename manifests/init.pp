@@ -41,10 +41,13 @@ class puppet (
   $certname                 = $puppet::params::certname,
   $puppet_master_package    = $puppet::params::puppet_master_package,
   $modulepath               = $puppet::params::modulepath,
-  $dashboard_version        = undef,
-  $dashboard_site           = undef,
+  $dashboard_ensure         = undef,
   $dashboard_user           = undef,
-  $dashboard_password       = undef
+  $dashboard_group          = undef,
+  $dashboard_password       = undef,
+  $dashboard_db             = undef,
+  $dashboard_charset        = undef,
+  $mysql_root_pw            = undef
 
 ) inherits puppet::params {
 
@@ -99,10 +102,13 @@ class puppet (
   if $dashboard_real {
 
     class {'dashboard':
-      dashboard_version         => $dashboard_version,
-      dashboard_site            => $dashboard_site,
+      dashboard_ensure          => $dashboard_ensure,
       dashboard_user            => $dashboard_user,
+      dashboard_group           => $dashboard_group,
       dashboard_password        => $dashboard_password,
+      dashboard_db              => $dashboard_db,
+      dashboard_charset         => $dashboard_charset,
+      mysql_root_pw             => $mysql_root_pw,
     }
   }
 
