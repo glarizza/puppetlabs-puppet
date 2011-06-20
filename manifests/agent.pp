@@ -29,8 +29,8 @@ class puppet::agent(
   }
 
   package { 'puppet':
-    name    => $puppet_agent_name,
-    ensure  => $version,
+    name   => $puppet_agent_name,
+    ensure => $version,
   }
 
   service { "puppet_agent":
@@ -55,3 +55,4 @@ class puppet::agent(
   }
 
 }
+

@@ -108,28 +108,28 @@ class puppet (
 
   if $master_real {
     class {'puppet::master':
-      version                   => $version_real,
-      modulepath                => $modulepath_real,
-      storeconfigs              => $storeconfigs_real,
-      storeconfigs_dbadapter    => $storeconfigs_dbadapter_real,
-      storeconfigs_dbuser       => $storeconfigs_dbuser_real,
-      storeconfigs_dbpassword   => $storeconfigs_dbpassword_real,
-      storeconfigs_dbserver     => $storeconfigs_dbserver_real,
-      storeconfigs_dbsocket     => $storeconfigs_dbsocket_real,
-      certname                  => $certname_real,
-      puppet_master_service     => $puppet_master_service_real,
-      puppet_master_package     => $puppet_master_package_real,
+      version                 => $version_real,
+      modulepath              => $modulepath_real,
+      storeconfigs            => $storeconfigs_real,
+      storeconfigs_dbadapter  => $storeconfigs_dbadapter_real,
+      storeconfigs_dbuser     => $storeconfigs_dbuser_real,
+      storeconfigs_dbpassword => $storeconfigs_dbpassword_real,
+      storeconfigs_dbserver   => $storeconfigs_dbserver_real,
+      storeconfigs_dbsocket   => $storeconfigs_dbsocket_real,
+      certname                => $certname_real,
+      puppet_master_service   => $puppet_master_service_real,
+      puppet_master_package   => $puppet_master_package_real,
     }
   }
 
   if $agent_real {
     class {'puppet::agent':
-      version                   => $version_real,
-      puppet_defaults           => $puppet_defaults_real, 
-      puppet_agent_service      => $puppet_agent_service_real,
-      puppet_agent_name         => $puppet_agent_name_real,
-      puppet_server             => $puppet_server_real,
-      puppet_conf               => $puppet_conf_real,
+      version              => $version_real,
+      puppet_defaults      => $puppet_defaults_real,
+      puppet_agent_service => $puppet_agent_service_real,
+      puppet_agent_name    => $puppet_agent_name_real,
+      puppet_server        => $puppet_server_real,
+      puppet_conf          => $puppet_conf_real,
     }
   }
 
