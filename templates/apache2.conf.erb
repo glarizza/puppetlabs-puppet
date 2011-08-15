@@ -1,0 +1,30 @@
+LoadModule ssl_module modules/mod_ssl.so
+
+Listen <%= puppet_passenger_port %>
+
+<VirtualHost *:<%= puppet_passenger_port %>>
+				ServerName <%= puppet_site %>
+        SSLEngine on
+        SSLProtocol -ALL +SSLv3 +TLSv1
+        SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP
+
+        SSLCertificateFile      <%= puppet_ssldir %>/certs/<%= certname %>.pem
+        SSLCertificateKeyFile   <%= puppet_ssldir %>/private_keys/<%= certname %>.pem
+        SSLCertificateChainFile <%= puppet_ssldir %>/ca/ca_crt.pem
+        SSLCACertificateFile    <%= puppet_ssldir %>/ca/ca_crt.pem
+        # If Apache complains about invalid signatures on the CRL, you can try disabling
+        # CRL checking by commenting the next line, but this is not recommended.
+        SSLCARevocationFile     <%= puppet_ssldir %>/ca/ca_crl.pem
+        SSLVerifyClient optional
+        SSLVerifyDepth  1
+        SSLOptions +StdEnvVars
+
+        DocumentRoot <%= puppet_docroot %>
+        RackBaseURI /
+        <Directory /etc/puppet/rack/>
+                Options None
+                AllowOverride None
+                Order allow,deny
+                allow from all
+        </Directory>
+</VirtualHost>

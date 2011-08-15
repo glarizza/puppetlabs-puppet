@@ -132,6 +132,11 @@ class puppet (
   if $master {
     class {'puppet::master':
       version                   => $version,
+      confdir                   => $confdir,
+      puppet_passenger          => $puppet_passenger,
+      puppet_site               => $puppet_site,
+      puppet_passenger_port     => $puppet_passenger_port,
+      puppet_docroot            => $puppet_docroot,
       modulepath                => $modulepath,
       storeconfigs              => $storeconfigs,
       storeconfigs_dbadapter    => $storeconfigs_dbadapter,
@@ -139,10 +144,14 @@ class puppet (
       storeconfigs_dbpassword   => $storeconfigs_dbpassword,
       storeconfigs_dbserver     => $storeconfigs_dbserver,
       storeconfigs_dbsocket     => $storeconfigs_dbsocket,
+      install_mysql_pkgs        => $install_mysql_pkgs,
       certname                  => $certname,
+      autosign                  => $autosign,
+      manifest                  => $manifest,
       puppet_master_service     => $puppet_master_service,
       puppet_master_package     => $puppet_master_package,
       package_provider          => $package_provider,
+      dashboard_port            => $dashboard_port,
     }
   }
 

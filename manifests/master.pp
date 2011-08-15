@@ -58,14 +58,22 @@
 #
 class puppet::master (
   $modulepath,
+  $confdir,
+  $manifest,
   $storeconfigs,
   $storeconfigs_dbadapter,
   $storeconfigs_dbuser,
   $storeconfigs_dbpassword,
   $storeconfigs_dbserver,
   $storeconfigs_dbsocket,
+  $install_mysql_pkgs,
   $certname,
   $autosign,
+  $dashboard_port = UNSET,
+  $puppet_passenger,
+  $puppet_site,
+  $puppet_docroot,
+  $puppet_passenger_port,
   $puppet_master_package,
   $package_provider = undef,
   $puppet_master_service,
@@ -86,37 +94,59 @@ class puppet::master (
       dbpassword => $storeconfigs_dbpassword,
       dbserver   => $storeconfigs_dbserver,
       dbsocket   => $storeconfigs_dbsocket,
-    }
-  }
+  if $puppet_passenger {
 
-  package { $puppet_master_package:
-    ensure => $version,
-    provider => $package_provider,
-  }
-
-  file { '/etc/puppet/namespaceauth.conf':
-    owner  => root,
-    group  => root,
-    mode   => 644,
-    source => 'puppet:///modules/puppet/namespaceauth.conf',
-  }
-
-  if ! defined(Concat[$pupet_conf]) {
-    concat { $puppet_conf:
-      mode    => '0644',
+    exec { "Certificate_Check":
+      command => "/usr/bin/puppet cert --generate ${certname}",
+      unless  => "/bin/ls ${puppet_ssldir}/certs/${certname}.pem",
+      before  => Class['::passenger'],
       require => Package[$puppet_master_package],
     }
-  } else {
-    Concat<| title == $puppet_conf |> {
-      require => Package[$puppet_master_package]
-    }
-  }
 
-  concat::fragment { 'puppet.conf-header':
-    order   => '05',
-    target  => "/etc/puppet/puppet.conf",
-    content => template("puppet/puppet.conf-master.erb"),
-  }
+    if ! defined(Class['passenger']) {
+      class { '::passenger': }
+    }
+
+    apache::vhost { "puppet-$puppet_site":
+      port     => $puppet_passenger_port,
+      priority => '40',
+      docroot  => $puppet_docroot,
+      template => 'puppet/apache2.conf.erb',
+      require  => [ File['/etc/puppet/rack/config.ru'], File['/etc/puppet/puppet.conf'] ],
+      ssl      => true,
+    }
+
+    file { ["/etc/puppet/rack", "/etc/puppet/rack/public"]:
+      ensure => directory,
+      mode   => '0755',
+    }
+
+    file { "/etc/puppet/rack/config.ru":
+      ensure => present,
+      source => "puppet:///modules/puppet/config.ru",
+      mode   => '0644',
+    }
+
+    if ! defined(Concat[$puppet_conf]) {
+      concat { $puppet_conf:
+        mode    => '0644',
+        require => [Package[$puppet_master_package], Class['passenger']],
+        notify  => Service['httpd'],
+      }
+    } else {
+      Concat<| title == $puppet_conf |> {
+        require => [Package[$puppet_master_package], Class['passenger']],
+        notify  +> Service['httpd'],
+      }
+    }
+
+    concat::fragment { 'puppet.conf-header':
+      order   => '05',
+      target  => "/etc/puppet/puppet.conf",
+      content => template("puppet/puppet.conf-master.erb"),
+    }
+
+  } else {
 
   if $package_provider == 'gem' {
     exec { 'puppet_master_start':
@@ -134,6 +164,7 @@ class puppet::master (
       require   => File['/etc/puppet/puppet.conf'],
       subscribe => Package[$puppet_master_package],
       #before    => Service['httpd'];
+  }
     }
   }
 }
