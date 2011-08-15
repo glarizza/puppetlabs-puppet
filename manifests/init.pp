@@ -4,6 +4,63 @@
 #
 # Parameters:
 #
+#   [*version*]               - The value of the ensure parameter for the
+#                               puppet master and agent packages
+#   [*master*]                - Boolean determining whether the the puppet
+#                               master service should be setup
+#   [*agent*]                 - Boolean determining whether the puppet agent
+#                               should be setup
+#   [*confdir*]               - The confdir configuration value in puppet.conf
+#   [*manifest*]              - The manifest configuration value in puppet.conf
+#   [*certname*]              - The certname configuration value in puppet.conf
+#   [*autosign*]              - The autosign configuration value in puppet.conf
+#   [*puppet_server*]         - The server configuration value in puppet.conf
+#   [*modulepath*]            - The modulepath configuration value used in
+#                               puppet.conf
+#   [*puppet_conf*]           - The path to the puppet.conf file
+#   [*puppet_logdir*]         - The path to the puppet log
+#   [*puppet_vardir*]         - The path to the puppet vardir
+#   [*puppet_defaults*]       - The path to your distro's puppet defaults file
+#   [*puppet_master_service*] - The name of the puppet master service
+#   [*puppet_agent_service*]  - The name of the puppet agent service
+#   [*puppet_passenger*]      - Boolean value to determine whether puppet is
+#                               to be run with Passenger
+#   [*puppet_site*]           - The VirtualHost value used in the apache vhost
+#                               configuration file when Passenger is enabled
+#   [*puppet_passenger_port*] - The port on which puppet is listening when
+#                               Passenger is enabled
+#   [*puppet_docroot*]        - The DocumentRoot value used in the apache vhost
+#                               configuration file when Passenger is enabled
+#   [*storeconfigs*]          - Boolean determining whether storeconfigs is
+#                               to be enabled.
+#   [*storeconfigs_dbadapter*] - The database adapter to use with storeconfigs
+#   [*storeconfigs_dbuser*]   - The database username used with storeconfigs
+#   [*storeconfigs_dbpassword*] - The database password used with storeconfigs
+#   [*storeconfigs_dbserver*]   - Fqdn of the storeconfigs database server
+#   [*storeconfigs_dbsocket*]   - The path to the mysql socket file
+#   [*install_mysql_pkgs*]      - Boolean determining whether mysql and related
+#                                 devel packages should be installed.
+#   [*puppet_master_package*]   - The name of the puppet master package
+#   [*package_provider*]        - The provider used for package installation
+#   [*dashboard*]               - Boolean determining whether the puppet
+#                                 dashboard is to be enabled
+#   [*dashboard_ensure*]        - The value of the ensure parameter for the
+#                                 puppet dashboard package
+#   [*dashboard_user*]          - Name of the puppet-dashboard database and
+#                                 system user
+#   [*dashboard_group*]         - Name of the puppet-dashboard group
+#   [*dashbaord_password*]      - Password for the puppet-dashboard database use
+#   [*dashboard_db*]            - The puppet-dashboard database name
+#   [*dashboard_charset*]       - Character set for the puppet-dashboard database
+#   [*dashboard_site*]          - The ServerName setting for Apache
+#   [*dashboard_port*]          - The port on which puppet-dashboard should run
+#   [*dashboard_passenger*]     - Boolean to determine whether Dashboard is to be
+#                                 used with Passenger
+#   [*dashboard_mysql_provider*] - The package provider to use when installing
+#                                  the ruby-mysql package
+#   [*dashboard_mysql_pkg*]     - The package name used for installing the
+#                                 ruby-mysql package
+#
 # Actions:
 #
 # Requires:
