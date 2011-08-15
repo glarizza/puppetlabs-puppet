@@ -120,56 +120,7 @@ class puppet (
 
 ) inherits puppet::params {
 
-  $v_bool = [ '^true$', '^false$' ]
-  $v_alphanum = '^[._0-9a-zA-Z:-]+$'
-  $v_path = '^/'
-  validate_re($version, $v_alphanum)
-  validate_re("$master", $v_bool)
-  validate_re("$agent", $v_bool)
-  validate_re("$dashboard", $v_bool)
-  validate_re("$storeconfigs", $v_bool)
-  validate_re($puppet_conf, $v_path)
-  validate_re($puppet_logdir, $v_path)
-  validate_re($puppet_vardir, $v_path)
-  validate_re($puppet_ssldir, $v_path)
-  validate_re($puppet_defaults, $v_path)
-  validate_re($puppet_master_service, $v_alphanum)
-  validate_re($puppet_agent_service, $v_alphanum)
-  validate_re($puppet_agent_name, $v_alphanum)
-  validate_re($puppet_server, $v_alphanum)
-  validate_re($storeconfigs_dbadapter,$v_alphanum)
-  validate_re($storeconfigs_dbuser, $v_alphanum)
-  validate_re($storeconfigs_dbpassword, $v_alphanum)
-  validate_re($storeconfigs_dbsocket, $v_path)
-  validate_re($storeconfigs_dbserver, $v_alphanum)
-  validate_re($certname, $v_alphanum)
-  validate_re($modulepath, $v_path)
-
-  $version_real                 = $version
-  $master_real                  = $master
-  $agent_real                   = $agent
-  $dashboard_real               = $dashboard
-  $puppet_conf_real             = $puppet_conf
-  $puppet_logdir_real           = $puppetlogdir
-  $puppet_vardir_real           = $puppet_vardir
-  $puppet_ssldir_real           = $puppet_ssldir
-  $puppet_defaults_real         = $puppet_defaults
-  $puppet_master_service_real   = $puppet_master_service
-  $puppet_agent_service_real    = $puppet_agent_service
-  $puppet_agent_name_real       = $puppet_agent_name
-  $puppet_server_real           = $puppet_server
-  $storeconfigs_dbadapter_real  = $storeconfigs_dbadapter
-  $storeconfigs_dbuser_real     = $storeconfigs_dbuser
-  $storeconfigs_dbpassword_real = $storeconfigs_dbpassword
-  $storeconfigs_dbsocket_real   = $storeconfigs_dbsocket
-  $storeconfigs_dbserver_real   = $storeconfigs_dbserver
-  $storeconfigs_real            = $storeconfigs
-  $certname_real                = $certname
-  $puppet_master_package_real   = $puppet_master_package
-  $modulepath_real              = $modulepath
-
-  if $dashboard_real {
-
+  if $dashboard {
     class {'dashboard':
       dashboard_version         => $dashboard_version,
       dashboard_site            => $dashboard_site,
@@ -178,31 +129,30 @@ class puppet (
     }
   }
 
-  if $master_real {
+  if $master {
     class {'puppet::master':
-      version                   => $version_real,
-      modulepath                => $modulepath_real,
-      storeconfigs              => $storeconfigs_real,
-      storeconfigs_dbadapter    => $storeconfigs_dbadapter_real,
-      storeconfigs_dbuser       => $storeconfigs_dbuser_real,
-      storeconfigs_dbpassword   => $storeconfigs_dbpassword_real,
-      storeconfigs_dbserver     => $storeconfigs_dbserver_real,
-      storeconfigs_dbsocket     => $storeconfigs_dbsocket_real,
-      certname                  => $certname_real,
-      puppet_master_service     => $puppet_master_service_real,
-      puppet_master_package     => $puppet_master_package_real,
+      version                   => $version,
+      modulepath                => $modulepath,
+      storeconfigs              => $storeconfigs,
+      storeconfigs_dbadapter    => $storeconfigs_dbadapter,
+      storeconfigs_dbuser       => $storeconfigs_dbuser,
+      storeconfigs_dbpassword   => $storeconfigs_dbpassword,
+      storeconfigs_dbserver     => $storeconfigs_dbserver,
+      storeconfigs_dbsocket     => $storeconfigs_dbsocket,
+      certname                  => $certname,
+      puppet_master_service     => $puppet_master_service,
+      puppet_master_package     => $puppet_master_package,
       package_provider          => $package_provider,
     }
   }
 
-  if $agent_real {
+  if $agent {
     class {'puppet::agent':
-      version                   => $version_real,
-      puppet_defaults           => $puppet_defaults_real, 
-      puppet_agent_service      => $puppet_agent_service_real,
-      puppet_agent_name         => $puppet_agent_name_real,
-      puppet_server             => $puppet_server_real,
-      puppet_conf               => $puppet_conf_real,
+      version                   => $version,
+      puppet_defaults           => $puppet_defaults,
+      puppet_agent_service      => $puppet_agent_service,
+      puppet_server             => $puppet_server,
+      puppet_conf               => $puppet_conf,
     }
   }
 
