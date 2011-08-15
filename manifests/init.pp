@@ -122,10 +122,17 @@ class puppet (
 
   if $dashboard {
     class {'dashboard':
-      dashboard_version         => $dashboard_version,
-      dashboard_site            => $dashboard_site,
-      dashboard_user            => $dashboard_user,
-      dashboard_password        => $dashboard_password,
+      dashboard_ensure       => $dashboard_version,
+      dashboard_group        => $dashboard_group,
+      dashboard_db           => $dashboard_db,
+      dashboard_charset      => $dashboard_charset,
+      dashboard_site         => $dashboard_site,
+      dashboard_port         => $dashboard_port,
+      passenger              => $dashboard_passenger,
+      mysql_package_provider => $dashboard_mysql_provider,
+      ruby_mysql_package     => $dashboard_mysql_pkg,
+      dashboard_user         => $dashboard_user,
+      dashboard_password     => $dashboard_password,
     }
   }
 
