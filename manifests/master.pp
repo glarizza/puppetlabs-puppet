@@ -85,6 +85,12 @@ class puppet::master (
     Concat::Fragment['puppet.conf-header']->Exec['puppet_master_start']
   } else {
     Concat::Fragment['puppet.conf-header']->Service[$puppet_master_service]
+  include concat::setup
+
+  File {
+    require => Package[$puppet_master_package],
+    owner   => 'puppet',
+    group   => 'puppet',
   }
 
   if $storeconfigs {
@@ -149,6 +155,8 @@ class puppet::master (
   } else {
 
   if $package_provider == 'gem' {
+    Concat::Fragment['puppet.conf-header']->Exec['puppet_master_start']
+
     exec { 'puppet_master_start':
       command   => '/usr/bin/nohup puppet master &',
       refresh   => '/usr/bin/pkill puppet && /usr/bin/nohup puppet master &',
