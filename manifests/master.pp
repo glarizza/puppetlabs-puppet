@@ -57,19 +57,18 @@
 #  }
 #
 class puppet::master (
-  $modulepath = '/etc/puppet/modules',
-  $manifest = '/etc/puppet/manifests/site.pp',
+  $modulepath,
   $storeconfigs,
   $storeconfigs_dbadapter,
   $storeconfigs_dbuser,
   $storeconfigs_dbpassword,
   $storeconfigs_dbserver,
   $storeconfigs_dbsocket,
-  $certname = $fqdn,
-  $autosign = false,
-  $puppet_master_package = $puppet::params::puppet_master_package,
+  $certname,
+  $autosign,
+  $puppet_master_package,
   $package_provider = undef,
-  $puppet_master_service = $puppet::params::puppet_master_service,
+  $puppet_master_service,
   $version
 
 ) inherits puppet::params {
