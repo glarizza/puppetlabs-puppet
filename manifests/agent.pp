@@ -29,10 +29,11 @@ class puppet::agent(
     }
   }
 
-  package { 'puppet':
-    name     => $puppet_agent_name,
-    ensure   => $version,
-    provider => $package_provider,
+  if ! defined(Package[$puppet_agent_name]) {
+    package { $puppet_agent_name:
+      ensure   => $version,
+      provider => $package_provider,
+    }
   }
 
   if $package_provider == 'gem' {
