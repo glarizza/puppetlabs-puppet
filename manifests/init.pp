@@ -176,5 +176,16 @@ class puppet (
     }
   }
 
+  user { 'puppet':
+    ensure => present,
+    uid    => $user_id,
+    gid    => 'puppet',
+  }
+
+  group { 'puppet':
+    ensure => present,
+    gid    => $group_id,
+  }
+
 }
 
