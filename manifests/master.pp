@@ -103,10 +103,12 @@ class puppet::master (
   if $puppet_passenger {
 
     exec { "Certificate_Check":
-      command => "/usr/bin/puppet cert --generate ${certname}",
-      unless  => "/bin/ls ${puppet_ssldir}/certs/${certname}.pem",
-      before  => Class['::passenger'],
-      require => Package[$puppet_master_package],
+      command   => "puppet cert --generate ${certname} --trace",
+      unless    => "/bin/ls ${puppet_ssldir}/certs/${certname}.pem",
+      path      => "/usr/bin:/usr/local/bin",
+      before    => Class['::passenger'],
+      require   => Package[$puppet_master_package],
+      logoutput => on_failure,
     }
 
     if ! defined(Class['passenger']) {
