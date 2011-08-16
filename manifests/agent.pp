@@ -36,6 +36,8 @@ class puppet::agent(
   }
 
   if $package_provider == 'gem' {
+    $service_notify = Exec['puppet_agent_start']
+
     exec { 'puppet_agent_start':
       command   => '/usr/bin/nohup puppet agent &',
       refresh   => '/usr/bin/pkill puppet && /usr/bin/nohup puppet agent &',
@@ -44,6 +46,8 @@ class puppet::agent(
       subscribe => Package[$puppet_agent_package],
     }
   } else {
+    $service_notify = Service[$puppet_agent_service]
+
     service { $puppet_agent_service:
       ensure    => running,
       enable    => true,
@@ -54,16 +58,22 @@ class puppet::agent(
     }
   }
 
+  if ! defined(Concat[$puppet_conf]) {
+    concat { $puppet_conf:
+      mode    => '0644',
+      require => Package['puppet'],
+      notify  => $puppet::agent::service_notify,
+    }
+  } else {
+    Concat<| title == $puppet_conf |> {
+      require => Package['puppet'],
+      notify  +> $puppet::agent::service_notify,
+    }
+  }
+
   concat::fragment { 'puppet.conf-common':
     order   => '00',
     target  => $puppet_conf,
     content => template("puppet/puppet.conf-common.erb"),
   }
-
-  concat { $puppet_conf:
-    mode    => '0644',
-    require => Package['puppet'],
-    notify  => Service['puppet_agent'],
-  }
-
 }

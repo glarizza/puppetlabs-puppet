@@ -101,6 +101,9 @@ class puppet::master (
       dbserver   => $storeconfigs_dbserver,
       dbsocket   => $storeconfigs_dbsocket,
   if $puppet_passenger {
+    $service_notify  = Service['httpd']
+    $service_require = [Package[$puppet_master_package], Class['passenger']]
+
 
     exec { "Certificate_Check":
       command   => "puppet cert --generate ${certname} --trace",
@@ -135,29 +138,16 @@ class puppet::master (
       mode   => '0644',
     }
 
-    if ! defined(Concat[$puppet_conf]) {
-      concat { $puppet_conf:
-        mode    => '0644',
-        require => [Package[$puppet_master_package], Class['passenger']],
-        notify  => Service['httpd'],
-      }
-    } else {
-      Concat<| title == $puppet_conf |> {
-        require => [Package[$puppet_master_package], Class['passenger']],
-        notify  +> Service['httpd'],
-      }
-    }
-
     concat::fragment { 'puppet.conf-header':
       order   => '05',
       target  => "/etc/puppet/puppet.conf",
       content => template("puppet/puppet.conf-master.erb"),
     }
-
   } else {
 
-  if $package_provider == 'gem' {
-    Concat::Fragment['puppet.conf-header']->Exec['puppet_master_start']
+    $service_require = Package[$puppet_master_package]
+    $service_notify = Exec['puppet_master_start']
+
 
     exec { 'puppet_master_start':
       command   => '/usr/bin/nohup puppet master &',
@@ -175,6 +165,17 @@ class puppet::master (
       subscribe => Package[$puppet_master_package],
       #before    => Service['httpd'];
   }
+
+  if ! defined(Concat[$puppet_conf]) {
+    concat { $puppet_conf:
+      mode    => '0644',
+      require => $service_require,
+      notify  => $service_notify,
+    }
+  } else {
+    Concat<| title == $puppet_conf |> {
+      require => $service_require,
+      notify  +> $service_notify,
     }
   }
 }
