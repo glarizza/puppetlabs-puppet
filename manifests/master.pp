@@ -83,10 +83,6 @@ class puppet::master (
 
 ) inherits puppet::params {
 
-  if $package_provider == 'gem' {
-    Concat::Fragment['puppet.conf-header']->Exec['puppet_master_start']
-  } else {
-    Concat::Fragment['puppet.conf-header']->Service[$puppet_master_service]
   include concat::setup
 
   File {
@@ -116,6 +112,7 @@ class puppet::master (
     $service_notify  = Service['httpd']
     $service_require = [Package[$puppet_master_package], Class['passenger']]
 
+    Concat::Fragment['puppet.conf-master'] -> Service['httpd']
 
     exec { "Certificate_Check":
       command   => "puppet cert --generate ${certname} --trace",
@@ -150,7 +147,7 @@ class puppet::master (
       mode   => '0644',
     }
 
-    concat::fragment { 'puppet.conf-header':
+    concat::fragment { 'puppet.conf-master':
       order   => '05',
       target  => "/etc/puppet/puppet.conf",
       content => template("puppet/puppet.conf-master.erb"),
@@ -160,6 +157,13 @@ class puppet::master (
     $service_require = Package[$puppet_master_package]
     $service_notify = Exec['puppet_master_start']
 
+    Concat::Fragment['puppet.conf-master'] -> Exec['puppet_master_start']
+
+    concat::fragment { 'puppet.conf-master':
+      order   => '05',
+      target  => "/etc/puppet/puppet.conf",
+      content => template("puppet/puppet.conf-master.erb"),
+    }
 
     exec { 'puppet_master_start':
       command   => '/usr/bin/nohup puppet master &',
