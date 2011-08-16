@@ -9,7 +9,7 @@ ssl_client_verify_header  = SSL_CLIENT_VERIFY
 certname                  = <%= certname %>
 report                    = true
 reports                   = store, http
-<% if dashboard_port != 'UNSET' %>
+<% if dashboard_port != 'UNSET' -%>
 reporturl                 = http://<%= puppet_site %>:<%= dashboard_port %>/reports
 <% else -%>
 reporturl                 = http://<%= puppet_site %>/reports
