@@ -168,14 +168,6 @@ class puppet::master (
       require   => File['/etc/puppet/puppet.conf'],
       subscribe => Package[$puppet_master_package],
     }
-  } else {
-    service { $puppet_master_service:
-      ensure    => running,
-      enable    => true,
-      hasstatus => true,
-      require   => File['/etc/puppet/puppet.conf'],
-      subscribe => Package[$puppet_master_package],
-      #before    => Service['httpd'];
   }
 
   if ! defined(Concat[$puppet_conf]) {
