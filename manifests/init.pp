@@ -96,7 +96,7 @@ class puppet (
   $puppet_site              = $puppet::params::puppet_site,
   $puppet_passenger_port    = $puppet::params::puppet_passenger_port,
   $puppet_docroot           = $puppet::params::puppet_docroot,
-  $storeconfigs             = $puppet::params::storeconfigs,
+  $storeconfigs             = false,
   $storeconfigs_dbadapter   = $puppet::params::storeconfigs_dbadapter,
   $storeconfigs_dbuser      = $puppet::params::storeconfigs_dbuser,
   $storeconfigs_dbpassword  = $puppet::params::storeconfigs_dbpassword,
