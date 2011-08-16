@@ -20,7 +20,7 @@ class puppet::storeconfigs (
 
   case $dbadapter {
     'sqlite3': {
-      include puppet::storeconfig::sqlite
+      include puppet::storeconfigs::sqlite
     }
     'mysql': {
       class {
