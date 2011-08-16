@@ -42,6 +42,8 @@
 #                                 devel packages should be installed.
 #   [*puppet_master_package*]   - The name of the puppet master package
 #   [*package_provider*]        - The provider used for package installation
+#   [*user_id*]                 - The UID of the puppet user
+#   [*group_id*]                - The GID of the puppet group
 #   [*dashboard*]               - Boolean determining whether the puppet
 #                                 dashboard is to be enabled
 #   [*dashboard_ensure*]        - The value of the ensure parameter for the
@@ -105,6 +107,8 @@ class puppet (
   $autosign                 = false,
   $puppet_master_package    = $puppet::params::puppet_master_package,
   $package_provider         = undef,
+  $user_id                  = undef,
+  $group_id                 = undef,
   $dashboard                = false,
   $dashboard_ensure         = undef,
   $dashboard_user           = undef,
