@@ -148,6 +148,7 @@ class puppet (
       puppet_site               => $puppet_site,
       puppet_passenger_port     => $puppet_passenger_port,
       puppet_docroot            => $puppet_docroot,
+      puppet_vardir             => $puppet_vardir,
       modulepath                => $modulepath,
       storeconfigs              => $storeconfigs,
       storeconfigs_dbadapter    => $storeconfigs_dbadapter,
