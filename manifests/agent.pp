@@ -59,6 +59,13 @@ class puppet::agent(
     }
   }
 
+  if defined(File['/etc/puppet']) {
+    File ['/etc/puppet'] {
+      require +> Package[$puppet_agent_name],
+      notify  +> $service_notify
+    }
+  }
+
   if ! defined(Concat[$puppet_conf]) {
     concat { $puppet_conf:
       mode    => '0644',

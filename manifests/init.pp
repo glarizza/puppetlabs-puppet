@@ -190,12 +190,14 @@ class puppet (
     gid    => $group_id,
   }
 
-  file { '/etc/puppet':
-    ensure       => directory,
-    group        => 'puppet',
-    owner        => 'puppet',
-    recurse      => true,
-    recurselimit => '1',
+  if ! defined(File['/etc/puppet']) {
+    file { '/etc/puppet':
+      ensure       => directory,
+      group        => 'puppet',
+      owner        => 'puppet',
+      recurse      => true,
+      recurselimit => '1',
+    }
   }
 
 }
