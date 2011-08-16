@@ -44,7 +44,7 @@ class puppet::agent(
       refresh   => '/usr/bin/pkill puppet && /usr/bin/nohup puppet agent &',
       unless    => "/bin/ps -ef | grep -v grep | /bin/grep 'puppet agent'",
       require   => File['/etc/puppet/puppet.conf'],
-      subscribe => Package[$puppet_agent_package],
+      subscribe => Package[$puppet_agent_name],
     }
   } else {
     $service_notify = Service[$puppet_agent_service]
@@ -54,7 +54,7 @@ class puppet::agent(
       enable    => true,
       hasstatus => true,
       require   => File['/etc/puppet/puppet.conf'],
-      subscribe => Package[$puppet_agent_package],
+      subscribe => Package[$puppet_agent_name],
       #before    => Service['httpd'];
     }
   }
