@@ -174,6 +174,8 @@ class puppet (
       puppet_agent_service      => $puppet_agent_service,
       puppet_server             => $puppet_server,
       puppet_conf               => $puppet_conf,
+      puppet_agent_name         => $puppet_agent_name,
+      package_provider          => $package_provider,
     }
   }
 
