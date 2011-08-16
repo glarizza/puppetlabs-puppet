@@ -102,6 +102,16 @@ class puppet::master (
       dbpassword => $storeconfigs_dbpassword,
       dbserver   => $storeconfigs_dbserver,
       dbsocket   => $storeconfigs_dbsocket,
+    }
+  }
+
+  if ! defined(Package[$puppet_master_package]) {
+    package { $puppet_master_package:
+      ensure   => $version,
+      provider => $package_provider,
+    }
+  }
+
   if $puppet_passenger {
     $service_notify  = Service['httpd']
     $service_require = [Package[$puppet_master_package], Class['passenger']]
