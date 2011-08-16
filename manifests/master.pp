@@ -186,6 +186,14 @@ class puppet::master (
       notify  +> $service_notify,
     }
   }
+
+  file { $puppet_vardir:
+    ensure       => directory,
+    recurse      => true,
+    recurselimit => '1',
+    notify       => $service_notify,
+  }
+
   if defined(File['/etc/puppet']) {
     File ['/etc/puppet'] {
       require +> Package[$puppet_master_package],
