@@ -20,14 +20,14 @@ class puppet::params {
   $storeconfigs_dbpassword          = 'password'
   $storeconfigs_dbserver            = 'localhost'
   $storeconfigs_dbsocket            = '/var/run/mysqld/mysqld.sock'
-  $certname                         = $fqdn
+  $certname                         = $::fqdn
   $confdir                          = '/etc/puppet'
   $manifest                         = '/etc/puppet/manifests/site.pp'
-  $puppet_site                      = $fqdn
+  $puppet_site                      = $::fqdn
   $puppet_docroot                   = '/etc/puppet/rack/public/'
   $puppet_passenger_port            = '8140'
 
-  case $operatingsystem {
+  case $::operatingsystem {
     'centos', 'redhat', 'fedora': {
       $puppet_master_package        = 'puppet'
       $puppet_master_service        = 'puppetmaster'

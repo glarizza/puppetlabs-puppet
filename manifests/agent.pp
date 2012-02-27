@@ -20,7 +20,7 @@ class puppet::agent(
   $version = 'present'
 ) inherits puppet::params {
 
-  if $kernel == "Linux" {
+  if $::kernel == "Linux" {
     file { $puppet_defaults:
       mode   => '0644',
       owner  => 'root',
