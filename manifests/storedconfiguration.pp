@@ -15,11 +15,11 @@ class puppet::storedconfiguration {
    $rails_version = '2.3.5'
    require rails
    require mysql::server
-   require puppet::server
+   require puppet::master
 
-   $puppet_storedconfig_password = $puppet::params::puppet_storedconfig_password
+   $puppet_storedconfig_password = $puppet::params::puppet_storeconfigs_password
 
-   package { $puppet::params::puppet_storedconfig_packages:
+   package { $puppet::params::puppet_storeconfigs_packages:
      ensure => installed,
    }
 
@@ -38,7 +38,7 @@ class puppet::storedconfiguration {
      password_hash => mysql_password($puppet_storedconfig_password),
      require => Database['puppet'],
    }
- 
+
    database_grant{ 'puppet@localhost/puppet':
      privileges => [all],
      require => [ Database['puppet'], Database_user['puppet@localhost'] ],
