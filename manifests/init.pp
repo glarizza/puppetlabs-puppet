@@ -66,7 +66,7 @@
 # Actions:
 #
 # Requires:
-# 
+#
 #  Class['dashboard']
 #  Class['mysql'] <--Storeconfigs
 #  Class['ruby']
@@ -126,7 +126,7 @@ class puppet (
 
   if $dashboard {
     class {'dashboard':
-      dashboard_ensure       => $dashboard_version,
+      dashboard_ensure       => $dashboard_ensure,
       dashboard_group        => $dashboard_group,
       dashboard_db           => $dashboard_db,
       dashboard_charset      => $dashboard_charset,
