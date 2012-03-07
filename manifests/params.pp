@@ -26,6 +26,7 @@ class puppet::params {
   $puppet_site                      = $::fqdn
   $puppet_docroot                   = '/etc/puppet/rack/public/'
   $puppet_passenger_port            = '8140'
+  $puppet_agent_enabled             = true
 
   case $::operatingsystem {
     'centos', 'redhat', 'fedora': {

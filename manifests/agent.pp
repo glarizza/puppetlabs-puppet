@@ -17,7 +17,8 @@ class puppet::agent(
   $puppet_agent_name = $::puppet::params::puppet_agent_name,
   $puppet_conf = $::puppet::params::puppet_conf,
   $package_provider = undef,
-  $version = 'present'
+  $version = 'present',
+  $puppet_agent_enabled = true
 ) inherits puppet::params {
 
   if $::kernel == "Linux" {
@@ -51,7 +52,7 @@ class puppet::agent(
 
     service { $puppet_agent_service:
       ensure    => running,
-      enable    => true,
+      enable    => $puppet_agent_enabled,
       hasstatus => true,
       require   => File['/etc/puppet/puppet.conf'],
       subscribe => Package[$puppet_agent_name],
