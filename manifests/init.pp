@@ -165,6 +165,7 @@ class puppet (
       puppet_master_package     => $puppet_master_package,
       package_provider          => $package_provider,
       dashboard_port            => $dashboard_port,
+      puppet_server             => $puppet_server
     }
   }
 
