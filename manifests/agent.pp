@@ -51,7 +51,10 @@ class puppet::agent(
     $service_notify = Service[$puppet_agent_service]
 
     service { $puppet_agent_service:
-      ensure    => running,
+      ensure    => $puppet_agent_enabled ? {
+        true    => running,
+        default => stopped
+      },
       enable    => $puppet_agent_enabled,
       hasstatus => true,
       require   => File['/etc/puppet/puppet.conf'],
