@@ -66,6 +66,8 @@ class puppet::agent(
   if defined(File['/etc/puppet']) {
     File ['/etc/puppet'] {
       require +> Package[$puppet_agent_name],
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  +> $service_notify
     }
   }
@@ -74,11 +76,15 @@ class puppet::agent(
     concat { $puppet_conf:
       mode    => '0644',
       require => Package['puppet'],
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  => $puppet::agent::service_notify,
     }
   } else {
     Concat<| title == $puppet_conf |> {
       require => Package['puppet'],
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  +> $puppet::agent::service_notify,
     }
   }

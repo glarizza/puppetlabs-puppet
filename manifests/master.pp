@@ -85,12 +85,6 @@ class puppet::master (
 
   include concat::setup
 
-  File {
-    require => Package[$puppet_master_package],
-    owner   => 'puppet',
-    group   => 'puppet',
-  }
-
   if $storeconfigs {
     class { 'puppet::storeconfigs':
       dbadapter  => $storeconfigs_dbadapter,
@@ -138,11 +132,15 @@ class puppet::master (
 
     file { ["/etc/puppet/rack", "/etc/puppet/rack/public"]:
       ensure => directory,
+      owner  => 'puppet',
+      group  => 'puppet',
       mode   => '0755',
     }
 
     file { "/etc/puppet/rack/config.ru":
       ensure => present,
+      owner  => 'puppet',
+      group  => 'puppet',
       source => "puppet:///modules/puppet/config.ru",
       mode   => '0644',
     }
@@ -177,12 +175,16 @@ class puppet::master (
   if ! defined(Concat[$puppet_conf]) {
     concat { $puppet_conf:
       mode    => '0644',
+      owner   => 'puppet',
+      group   => 'puppet',
       require => $service_require,
       notify  => $service_notify,
     }
   } else {
     Concat<| title == $puppet_conf |> {
       require => $service_require,
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  +> $service_notify,
     }
   }
@@ -197,6 +199,8 @@ class puppet::master (
 
   file { $puppet_vardir:
     ensure       => directory,
+    owner        => 'puppet',
+    group        => 'puppet',
     recurse      => true,
     recurselimit => '1',
     notify       => $service_notify,
@@ -205,6 +209,8 @@ class puppet::master (
   if defined(File['/etc/puppet']) {
     File ['/etc/puppet'] {
       require +> Package[$puppet_master_package],
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  +> $service_notify
     }
   }
