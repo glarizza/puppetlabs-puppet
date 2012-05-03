@@ -58,38 +58,32 @@
 #  }
 #
 class puppet::master (
-  $modulepath = $::puppet::params::modulepath,
-  $confdir = $::puppet::params::confdir,
-  $manifest = $::puppet::params::manifest,
-  $storeconfigs = false,
-  $storeconfigs_dbadapter = $::puppet::params::storeconfigs_dbadapter,
-  $storeconfigs_dbuser = $::puppet::params::storeconfigs_dbuser,
-  $storeconfigs_dbpassword = $::puppet::params::storeconfigs_dbpassword,
-  $storeconfigs_dbserver = $::puppet::params::storeconfigs_dbserver,
-  $storeconfigs_dbsocket = $::puppet::params::storeconfigs_dbsocket,
-  $install_mysql_pkgs = $::puppet::params::puppet_storeconfigs_packages,
-  $certname = $::fqdn,
-  $autosign = false,
-  $dashboard_port = 3000,
-  $puppet_passenger = false,
-  $puppet_site = $::puppet::params::puppet_site,
-  $puppet_docroot = $::puppet::params::puppet_docroot,
-  $puppet_vardir = $::puppet::params::puppet_vardir,
-  $puppet_passenger_port = false,
-  $puppet_master_package = $::puppet::params::puppet_master_package,
-  $package_provider = undef,
-  $puppet_master_service = $::puppet::params::puppet_master_service,
-  $version = 'present'
-
+  $modulepath               = $::puppet::params::modulepath,
+  $confdir                  = $::puppet::params::confdir,
+  $manifest                 = $::puppet::params::manifest,
+  $storeconfigs             = false,
+  $storeconfigs_dbadapter   = $::puppet::params::storeconfigs_dbadapter,
+  $storeconfigs_dbuser      = $::puppet::params::storeconfigs_dbuser,
+  $storeconfigs_dbpassword  = $::puppet::params::storeconfigs_dbpassword,
+  $storeconfigs_dbserver    = $::puppet::params::storeconfigs_dbserver,
+  $storeconfigs_dbsocket    = $::puppet::params::storeconfigs_dbsocket,
+  $install_mysql_pkgs       = $::puppet::params::puppet_storeconfigs_packages,
+  $certname                 = $::fqdn,
+  $autosign                 = false,
+  $dashboard_port           = 3000,
+  $puppet_passenger         = false,
+  $puppet_site              = $::puppet::params::puppet_site,
+  $puppet_docroot           = $::puppet::params::puppet_docroot,
+  $puppet_vardir            = $::puppet::params::puppet_vardir,
+  $puppet_passenger_port    = false,
+  $puppet_master_package    = $::puppet::params::puppet_master_package,
+  $package_provider         = undef,
+  $puppet_master_service    = $::puppet::params::puppet_master_service,
+  $version                  = 'present',
+  $puppet_server            = $puppet::params::puppet_server
 ) inherits puppet::params {
 
   include concat::setup
-
-  File {
-    require => Package[$puppet_master_package],
-    owner   => 'puppet',
-    group   => 'puppet',
-  }
 
   if $storeconfigs {
     class { 'puppet::storeconfigs':
@@ -138,11 +132,15 @@ class puppet::master (
 
     file { ["/etc/puppet/rack", "/etc/puppet/rack/public"]:
       ensure => directory,
+      owner  => 'puppet',
+      group  => 'puppet',
       mode   => '0755',
     }
 
     file { "/etc/puppet/rack/config.ru":
       ensure => present,
+      owner  => 'puppet',
+      group  => 'puppet',
       source => "puppet:///modules/puppet/config.ru",
       mode   => '0644',
     }
@@ -177,12 +175,16 @@ class puppet::master (
   if ! defined(Concat[$puppet_conf]) {
     concat { $puppet_conf:
       mode    => '0644',
+      owner   => 'puppet',
+      group   => 'puppet',
       require => $service_require,
       notify  => $service_notify,
     }
   } else {
     Concat<| title == $puppet_conf |> {
       require => $service_require,
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  +> $service_notify,
     }
   }
@@ -197,6 +199,8 @@ class puppet::master (
 
   file { $puppet_vardir:
     ensure       => directory,
+    owner        => 'puppet',
+    group        => 'puppet',
     recurse      => true,
     recurselimit => '1',
     notify       => $service_notify,
@@ -205,6 +209,8 @@ class puppet::master (
   if defined(File['/etc/puppet']) {
     File ['/etc/puppet'] {
       require +> Package[$puppet_master_package],
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  +> $service_notify
     }
   }

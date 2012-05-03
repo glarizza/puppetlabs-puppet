@@ -17,7 +17,8 @@ class puppet::agent(
   $puppet_agent_name = $::puppet::params::puppet_agent_name,
   $puppet_conf = $::puppet::params::puppet_conf,
   $package_provider = undef,
-  $version = 'present'
+  $version = 'present',
+  $puppet_agent_enabled = true
 ) inherits puppet::params {
 
   if $::kernel == "Linux" {
@@ -50,8 +51,11 @@ class puppet::agent(
     $service_notify = Service[$puppet_agent_service]
 
     service { $puppet_agent_service:
-      ensure    => running,
-      enable    => true,
+      ensure    => $puppet_agent_enabled ? {
+        true    => running,
+        default => stopped
+      },
+      enable    => $puppet_agent_enabled,
       hasstatus => true,
       require   => File['/etc/puppet/puppet.conf'],
       subscribe => Package[$puppet_agent_name],
@@ -62,6 +66,8 @@ class puppet::agent(
   if defined(File['/etc/puppet']) {
     File ['/etc/puppet'] {
       require +> Package[$puppet_agent_name],
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  +> $service_notify
     }
   }
@@ -70,18 +76,24 @@ class puppet::agent(
     concat { $puppet_conf:
       mode    => '0644',
       require => Package['puppet'],
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  => $puppet::agent::service_notify,
     }
   } else {
     Concat<| title == $puppet_conf |> {
       require => Package['puppet'],
+      owner   => 'puppet',
+      group   => 'puppet',
       notify  +> $puppet::agent::service_notify,
     }
   }
 
-  concat::fragment { 'puppet.conf-common':
-    order   => '00',
-    target  => $puppet_conf,
-    content => template("puppet/puppet.conf-common.erb"),
+  if ! defined(Concat::Fragment['puppet.conf-common']) {
+    concat::fragment { 'puppet.conf-common':
+      order   => '00',
+      target  => $puppet_conf,
+      content => template("puppet/puppet.conf-common.erb"),
+    }
   }
 }

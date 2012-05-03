@@ -1,4 +1,4 @@
-# Class: puppet::storedconfiguration
+# Class: puppet::storeconfiguration
 #
 # This class installs and configures Puppet's stored configuration capability
 #

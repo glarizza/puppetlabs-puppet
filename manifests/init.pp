@@ -91,6 +91,7 @@ class puppet (
   $puppet_defaults          = $puppet::params::puppet_defaults,
   $puppet_master_service    = $puppet::params::puppet_master_service,
   $puppet_agent_service     = $puppet::params::puppet_agent_service,
+  $puppet_agent_enabled     = $puppet::params::puppet_agent_enabled,
   $puppet_server            = $puppet::params::puppet_server,
   $puppet_passenger         = false,
   $puppet_site              = $puppet::params::puppet_site,
@@ -164,6 +165,7 @@ class puppet (
       puppet_master_package     => $puppet_master_package,
       package_provider          => $package_provider,
       dashboard_port            => $dashboard_port,
+      puppet_server             => $puppet_server
     }
   }
 
@@ -176,6 +178,7 @@ class puppet (
       puppet_conf               => $puppet_conf,
       puppet_agent_name         => $puppet_agent_name,
       package_provider          => $package_provider,
+      puppet_agent_enabled      => $puppet_agent_enabled,
     }
   }
 

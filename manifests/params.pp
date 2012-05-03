@@ -12,7 +12,7 @@
 #
 class puppet::params {
 
-  $puppet_server                    = 'aserver.puppetlabs.lan'
+  $puppet_server                    = 'puppet'
   $puppet_storeconfigs_password     = 'password'
   $modulepath                       = "/etc/puppet/modules"
   $storeconfigs_dbadapter           = 'mysql'
@@ -26,6 +26,7 @@ class puppet::params {
   $puppet_site                      = $::fqdn
   $puppet_docroot                   = '/etc/puppet/rack/public/'
   $puppet_passenger_port            = '8140'
+  $puppet_agent_enabled             = true
 
   case $::operatingsystem {
     'centos', 'redhat', 'fedora': {
