@@ -2,9 +2,9 @@
 #puppet origin: puppet-server.conf.erb
 
 [main]
-server										= <%= puppet_server %>
+server										= <%= $puppet::params::puppet_server %>
 modulepath								= /etc/puppet/modules/dist:/etc/puppet/modules/site
-logdir										= /var/log/puppet
+logdir										= <%= $puppet::params::puppet_logdir %>
 vardir										= /var/lib/puppet
 ssldir										= /var/lib/puppet/ssl
 rundir										= /var/run/puppet
