@@ -21,7 +21,7 @@ class puppet::agent(
   $puppet_agent_enabled = true
 ) inherits puppet::params {
 
-  if $::kernel == "Linux" {
+  if $::kernel == 'Linux' {
     file { $puppet_defaults:
       mode   => '0644',
       owner  => 'root',
@@ -43,7 +43,7 @@ class puppet::agent(
     exec { 'puppet_agent_start':
       command   => '/usr/bin/nohup puppet agent &',
       refresh   => '/usr/bin/pkill puppet && /usr/bin/nohup puppet agent &',
-      unless    => "/bin/ps -ef | grep -v grep | /bin/grep 'puppet agent'",
+      unless    => '/bin/ps -ef | grep -v grep | /bin/grep \'puppet agent\'',
       require   => File['/etc/puppet/puppet.conf'],
       subscribe => Package[$puppet_agent_name],
     }
@@ -93,7 +93,7 @@ class puppet::agent(
     concat::fragment { 'puppet.conf-common':
       order   => '00',
       target  => $puppet_conf,
-      content => template("puppet/puppet.conf-common.erb"),
+      content => template('puppet/puppet.conf-common.erb'),
     }
   }
 }
