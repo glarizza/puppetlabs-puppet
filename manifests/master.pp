@@ -21,6 +21,8 @@
 #   [*dashboard_port*]          - The port on which puppet-dashboard should run
 #   [*puppet_passenger*]      - Boolean value to determine whether puppet is
 #                               to be run with Passenger
+#   [*puppet_passenger_class*]- string which determines which puppet class
+#                               holds the passenger definition
 #   [*puppet_site*]           - The VirtualHost value used in the apache vhost
 #                               configuration file when Passenger is enabled
 #   [*puppet_docroot*]        - The DocumentRoot value used in the apache vhost
@@ -72,6 +74,7 @@ class puppet::master (
   $autosign                 = false,
   $dashboard_port           = 3000,
   $puppet_passenger         = false,
+  $puppet_passenger_class   = 'passenger',
   $puppet_site              = $::puppet::params::puppet_site,
   $puppet_docroot           = $::puppet::params::puppet_docroot,
   $puppet_vardir            = $::puppet::params::puppet_vardir,
@@ -104,7 +107,7 @@ class puppet::master (
 
   if $puppet_passenger {
     $service_notify  = Service['httpd']
-    $service_require = [Package[$puppet_master_package], Class['passenger']]
+    $service_require = [Package[$puppet_master_package], Class[$puppet_passenger_class]]
 
     Concat::Fragment['puppet.conf-master'] -> Service['httpd']
 
@@ -112,13 +115,13 @@ class puppet::master (
       command   => "puppet cert --generate ${certname} --trace",
       unless    => "/bin/ls ${puppet_ssldir}/certs/${certname}.pem",
       path      => "/usr/bin:/usr/local/bin",
-      before    => Class['::passenger'],
+      before    => Class[$puppet_passenger_class],
       require   => Package[$puppet_master_package],
       logoutput => on_failure,
     }
 
-    if ! defined(Class['passenger']) {
-      class { '::passenger': }
+    if ! defined(Class[$puppet_passenger_class]) {
+      class { $puppet_passenger_class: }
     }
 
     apache::vhost { "puppet-$puppet_site":
