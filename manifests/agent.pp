@@ -28,7 +28,7 @@ class puppet::agent(
       mode    => '0644',
       owner   => 'root',
       group   => 'root',
-      content => template("puppet:///modules/puppet/${puppet_defaults}.erb"),
+      content => template("puppet/${puppet_defaults}.erb"),
     }
   }
 
