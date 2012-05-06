@@ -23,6 +23,8 @@ class puppet::agent(
   $puppet_run_interval    = 30
 ) inherits puppet::params {
 
+  include concat::setup
+
   if $::kernel == 'Linux' {
     file { $puppet_defaults:
       mode    => '0644',
