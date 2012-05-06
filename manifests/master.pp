@@ -115,14 +115,16 @@ class puppet::master (
       command   => "puppet cert --generate ${certname} --trace",
       unless    => "/bin/ls ${puppet_ssldir}/certs/${certname}.pem",
       path      => '/usr/bin:/usr/local/bin',
-      before    => Class[$puppet_passenger_class],
-      require   => Package[$puppet_master_package],
+#      before    => Class[$puppet_passenger_class],
+#      require   => Package[$puppet_master_package],
       logoutput => on_failure,
     }
 
     if ! defined(Class[$puppet_passenger_class]) {
       class { $puppet_passenger_class: }
     }
+
+    include apache
 
     apache::vhost { "puppet-${puppet_site}":
       port     => $puppet_passenger_port,
@@ -185,14 +187,15 @@ class puppet::master (
       require => $service_require,
       notify  => $service_notify,
     }
-  } else {
-    Concat<| title == $puppet_conf |> {
-      require => $service_require,
-      owner   => 'puppet',
-      group   => 'puppet',
-      notify  +> $service_notify,
-    }
   }
+#  else {
+#    Concat<| title == $puppet_conf |> {
+#      require => $service_require,
+#      owner   => 'puppet',
+#      group   => 'puppet',
+#      notify  +> $service_notify,
+#    }
+#  }
 
   if ! defined(Concat::Fragment['puppet.conf-common']) {
     concat::fragment { 'puppet.conf-common':
