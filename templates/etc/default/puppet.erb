@@ -1,7 +1,11 @@
 # Only used on debian. Defaults for puppet - sourced by /etc/init.d/puppet
 
 # Start puppet on boot?
+<% if puppet_run_style == 'service' -%>
 START=yes
+<% else -%>
+START=no
+<% end -%> 
 
 # Startup options
 DAEMON_OPTS=""

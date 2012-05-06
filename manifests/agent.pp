@@ -25,10 +25,10 @@ class puppet::agent(
 
   if $::kernel == 'Linux' {
     file { $puppet_defaults:
-      mode   => '0644',
-      owner  => 'root',
-      group  => 'root',
-      source => "puppet:///modules/puppet/${puppet_defaults}",
+      mode    => '0644',
+      owner   => 'root',
+      group   => 'root',
+      content => template("puppet:///modules/puppet/${puppet_defaults}.erb"),
     }
   }
 
