@@ -96,6 +96,16 @@ class puppet::master (
       dbserver   => $storeconfigs_dbserver,
       dbsocket   => $storeconfigs_dbsocket,
     }
+
+    if $::operatingsystem == 'debian' {
+      package{ 'activerecord':
+        ensure => present,
+        name   => 'libactiverecord-ruby'
+      }
+      package{ 'libmysql-ruby':
+        ensure => present,
+      }
+    }
   }
 
   if ! defined(Package[$puppet_master_package]) {
