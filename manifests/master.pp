@@ -111,10 +111,10 @@ class puppet::master (
 
     Concat::Fragment['puppet.conf-master'] -> Service['httpd']
 
-    exec { "Certificate_Check":
+    exec { 'Certificate_Check':
       command   => "puppet cert --generate ${certname} --trace",
       unless    => "/bin/ls ${puppet_ssldir}/certs/${certname}.pem",
-      path      => "/usr/bin:/usr/local/bin",
+      path      => '/usr/bin:/usr/local/bin',
       before    => Class[$puppet_passenger_class],
       require   => Package[$puppet_master_package],
       logoutput => on_failure,
@@ -124,34 +124,36 @@ class puppet::master (
       class { $puppet_passenger_class: }
     }
 
-    apache::vhost { "puppet-$puppet_site":
+    apache::vhost { "puppet-${puppet_site}":
       port     => $puppet_passenger_port,
       priority => '40',
       docroot  => $puppet_docroot,
+      configure_firewall => false,
+      servername => $puppet_site,
       template => 'puppet/apache2.conf.erb',
       require  => [ File['/etc/puppet/rack/config.ru'], File['/etc/puppet/puppet.conf'] ],
       ssl      => true,
     }
 
-    file { ["/etc/puppet/rack", "/etc/puppet/rack/public"]:
+    file { ['/etc/puppet/rack', '/etc/puppet/rack/public']:
       ensure => directory,
       owner  => 'puppet',
       group  => 'puppet',
       mode   => '0755',
     }
 
-    file { "/etc/puppet/rack/config.ru":
+    file { '/etc/puppet/rack/config.ru':
       ensure => present,
       owner  => 'puppet',
       group  => 'puppet',
-      source => "puppet:///modules/puppet/config.ru",
+      source => 'puppet:///modules/puppet/config.ru',
       mode   => '0644',
     }
 
     concat::fragment { 'puppet.conf-master':
       order   => '05',
-      target  => "/etc/puppet/puppet.conf",
-      content => template("puppet/puppet.conf-master.erb"),
+      target  => '/etc/puppet/puppet.conf',
+      content => template('puppet/puppet.conf-master.erb'),
     }
   } else {
 
@@ -162,14 +164,14 @@ class puppet::master (
 
     concat::fragment { 'puppet.conf-master':
       order   => '05',
-      target  => "/etc/puppet/puppet.conf",
-      content => template("puppet/puppet.conf-master.erb"),
+      target  => '/etc/puppet/puppet.conf',
+      content => template('puppet/puppet.conf-master.erb'),
     }
 
     exec { 'puppet_master_start':
       command   => '/usr/bin/nohup puppet master &',
       refresh   => '/usr/bin/pkill puppet && /usr/bin/nohup puppet master &',
-      unless    => "/bin/ps -ef | grep -v grep | /bin/grep 'puppet master'",
+      unless    => '/bin/ps -ef | grep -v grep | /bin/grep \'puppet master\'',
       require   => File['/etc/puppet/puppet.conf'],
       subscribe => Package[$puppet_master_package],
     }
@@ -196,7 +198,7 @@ class puppet::master (
     concat::fragment { 'puppet.conf-common':
       order   => '00',
       target  => $puppet_conf,
-      content => template("puppet/puppet.conf-common.erb"),
+      content => template('puppet/puppet.conf-common.erb'),
     }
   }
 
