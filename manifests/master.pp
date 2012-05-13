@@ -137,14 +137,14 @@ class puppet::master (
     include apache
 
     apache::vhost { "puppet-${puppet_site}":
-      port     => $puppet_passenger_port,
-      priority => '40',
-      docroot  => $puppet_docroot,
+      port               => $puppet_passenger_port,
+      priority           => '40',
+      docroot            => $puppet_docroot,
       configure_firewall => false,
-      servername => $puppet_site,
-      template => 'puppet/apache2.conf.erb',
-      require  => [ File['/etc/puppet/rack/config.ru'], File['/etc/puppet/puppet.conf'] ],
-      ssl      => true,
+      servername         => $puppet_site,
+      template           => 'puppet/apache2.conf.erb',
+      require            => [ File['/etc/puppet/rack/config.ru'], File['/etc/puppet/puppet.conf'] ],
+      ssl                => true,
     }
 
     file { ['/etc/puppet/rack', '/etc/puppet/rack/public']:
@@ -198,14 +198,6 @@ class puppet::master (
       notify  => $service_notify,
     }
   }
-#  else {
-#    Concat<| title == $puppet_conf |> {
-#      require => $service_require,
-#      owner   => 'puppet',
-#      group   => 'puppet',
-#      notify  +> $service_notify,
-#    }
-#  }
 
   if ! defined(Concat::Fragment['puppet.conf-common']) {
     concat::fragment { 'puppet.conf-common':
