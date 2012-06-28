@@ -83,7 +83,8 @@ class puppet::master (
   $package_provider         = undef,
   $puppet_master_service    = $::puppet::params::puppet_master_service,
   $version                  = 'present',
-  $puppet_server            = $puppet::params::puppet_server
+  $puppet_server            = $puppet::params::puppet_server,
+  $apache_serveradmin       = $puppet::params::apache_serveradmin
 ) inherits puppet::params {
 
   include concat::setup
@@ -141,6 +142,7 @@ class puppet::master (
       priority           => '40',
       docroot            => $puppet_docroot,
       configure_firewall => false,
+      serveradmin        => $apache_serveradmin,
       servername         => $puppet_site,
       template           => 'puppet/apache2.conf.erb',
       require            => [ File['/etc/puppet/rack/config.ru'], File['/etc/puppet/puppet.conf'] ],
