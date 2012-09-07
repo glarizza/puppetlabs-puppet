@@ -9,7 +9,7 @@ autosign                  = <%= autosign %>
 ssl_client_header         = SSL_CLIENT_S_DN
 ssl_client_verify_header  = SSL_CLIENT_VERIFY
 certname                  = <%= certname %>
-report                    = true
+report                    = <%= report %>
 reports                   = store, http
 <% if dashboard_port != 'UNSET' -%>
 reporturl                 = http://<%= puppet_site %>:<%= dashboard_port %>/reports

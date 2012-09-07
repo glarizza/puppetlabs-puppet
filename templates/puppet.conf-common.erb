@@ -16,7 +16,7 @@ postrun_command           = /etc/puppet/etckeeper-commit-post
 <% end %>
 
 [agent]
-report                    = true
+report                    = <%= puppet_agent_report %>
 show_diff                 = true
 summarize                 = true
 environment               = <%= environment %>

@@ -20,7 +20,8 @@ class puppet::agent(
   $version                = 'present',
   $puppet_agent_enabled   = true,
   $puppet_run_style       = 'service',
-  $puppet_run_interval    = 30
+  $puppet_run_interval    = 30,
+  $puppet_agent_report    = true
 ) inherits puppet::params {
 
   include concat::setup
