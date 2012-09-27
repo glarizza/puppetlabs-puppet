@@ -85,7 +85,8 @@ class puppet::master (
   $puppet_master_service    = $::puppet::params::puppet_master_service,
   $version                  = 'present',
   $puppet_server            = $puppet::params::puppet_server,
-  $apache_serveradmin       = $puppet::params::apache_serveradmin
+  $apache_serveradmin       = $puppet::params::apache_serveradmin,
+  $puppet_agent_report      = true
 ) inherits puppet::params {
 
   include concat::setup
