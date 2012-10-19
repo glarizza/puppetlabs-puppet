@@ -51,7 +51,7 @@
 #   [*dashboard_user*]          - Name of the puppet-dashboard database and
 #                                 system user
 #   [*dashboard_group*]         - Name of the puppet-dashboard group
-#   [*dashbaord_password*]      - Password for the puppet-dashboard database use
+#   [*dashboard_password*]      - Password for the puppet-dashboard database use
 #   [*dashboard_db*]            - The puppet-dashboard database name
 #   [*dashboard_charset*]       - Character set for the puppet-dashboard database
 #   [*dashboard_site*]          - The ServerName setting for Apache
